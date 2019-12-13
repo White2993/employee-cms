@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-})
+});
 
 inquirer
   .prompt([
@@ -32,19 +32,26 @@ inquirer
     }
   ]).then(answer => {
     if (answer.init_question === 'ADD DEPARTMENT') {
-      console.log('YOU HAVE BEEN SLAIN BY A GRU!' + '\n' + 'BUUUUUUT...');
       inquirer
         .prompt([
           {
-            message: 'WHICH DEPARTMENT WOULD YOU LIKE TO ADD?',
-            name: 'add_dept'
+            message: 'WOULD YOU LIKE TO ADD OR VIEW DEPARTMENTS?',
+            name: 'addorview'
           }
         ]).then(x => {
-          if(x.add_dept){
-            console.log('HELL YEAH BROTHER');
-            connection.query("INSERT INTO department(name) VALUES (?)", [x.add_dept]);
-            connection.end();
-          }
-        });
+          if(x.addorview === 'ADD'){
+            inquirer.prompt([
+              {
+                message: 'WHAT DEPARTMENT WOULD YOU LIKE TO ADD?',
+                name: 'add_dept'
+              }
+            ]).then(x => {
+              if(x.add_dept)
+              connection.query("INSERT INTO department(name) VALUES (?)", [x.add_dept]);
+              console.log(x.add_dept)
+              connection.end();
+          });
+        }
+      });
     };
-  })
+  });
