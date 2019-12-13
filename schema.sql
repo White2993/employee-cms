@@ -24,3 +24,5 @@ CREATE TABLE department (
     name VARCHAR(100),
     PRIMARY KEY (id)
 );
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Goldensphinx596!'
