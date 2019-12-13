@@ -17,8 +17,18 @@ connection.connect(function(err) {
 inquirer
   .prompt([
     {
+      type: 'list',
       message: 'WHAT WOULD YOU LIKE TO DO?',
-      name: 'init_question'
+      name: 'init_question',
+      choices: [
+        'ADD DEPARTMENT', 
+        'ADD ROLE', 
+        'ADD EMPLOYEE', 
+        'VIEW DEPARTMENT', 
+        'VIEW ROLE', 
+        'VIEW EMPLOYEE', 
+        'UPDATE EMPLOYEE ROLE'
+      ]
     }
   ]).then(answer => {
     if (answer.init_question === 'ADD DEPARTMENT') {
