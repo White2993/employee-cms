@@ -69,12 +69,42 @@ inquirer
               ]).then(answer => {
                 notDone = answer.restart;
                 startApp(questions);
-              })
+              });
+            });
+          };
           });
+
+
+    } else if (answer.init_question === 'ADD ROLE') {
+      inquirer.prompt([
+        {
+          message: 'WHAT ROLE WOULD YOU LIKE TO ADD?',
+          name: 'addrole'
         }
-      });
-    };
-  })
-}
+      ])
+      .then(answer => {
+        connection.query("INSERT INTO employee(role_id) VALUES (?)", [answer.addrole]);
+        inquirer.prompt([
+          {
+            type: 'confirm',
+            message: 'WOULD YOU LIKE TO DO ANYTHING ELSE?',
+            name: 'restart'
+          }
+        ])
+        .then(answer => {
+          notDone = answer.restart;
+          startApp(questions);
+        });
+      })
+    }
+    });
+  
+  
+  
+  
+  
+  
+  
+  };
 
 startApp(questions);
