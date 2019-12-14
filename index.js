@@ -14,6 +14,18 @@ connection.connect(function(err) {
   if (err) throw err;
 });
 
+var notDone = true;
+function startApp(cb) {
+  if(notDone) {
+    return cb();
+  } else {
+    connection.end();
+  }
+}
+
+
+
+function questions() {
 inquirer
   .prompt([
     {
@@ -48,10 +60,21 @@ inquirer
             ]).then(x => {
               if(x.add_dept)
               connection.query("INSERT INTO department(name) VALUES (?)", [x.add_dept]);
-              console.log(x.add_dept)
-              connection.end();
+              inquirer.prompt([
+                {
+                  type: 'confirm',
+                  message: 'WOULD YOU LIKE TO DO ANYTHING ELSE?',
+                  name: 'restart'
+                }
+              ]).then(answer => {
+                notDone = answer.restart;
+                startApp(questions);
+              })
           });
         }
       });
     };
-  });
+  })
+}
+
+startApp(questions);
