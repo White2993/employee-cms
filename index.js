@@ -98,10 +98,15 @@ inquirer
           name: 'department_id'
         }
       ]).then(answer => {
-        connection.query(`INSERT INTO employee_role(title, salary, department_id) VALUES (???)`, [answer.role], [answer.salary], [answer.department_id])
+        connection.query(
+        "INSERT INTO employee_role SET ?", 
+        {
+          title: answer.role,
+          salary: answer.salary,
+          department_id: answer.department_id
+        })
         role_list.push(Object.assign({}, answer));
         console.log(role_list);
-        if(answer) {
         inquirer.prompt([
           {
             type: 'confirm',
@@ -112,8 +117,7 @@ inquirer
           notDone = answer.restart;
           startApp(questions);
         });
-      }
-      })
+      });
     
     
     } else if (answer.init_question === 'VIEW ALL ROLES') {
@@ -152,7 +156,15 @@ inquirer
           name: 'manager_id'
         }
       ]).then(answer => {
-          connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?)`, [answer.first_name], [answer.last_name], [answer.role_id], [answer.manager_id])
+          connection.query(
+          "INSERT INTO employee SET ?", 
+          {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: answer.role_id,
+            manager_id: answer.manager_id
+          }
+          )
           console.log(answer)
           inquirer.prompt([
             {
@@ -165,7 +177,24 @@ inquirer
             startApp(questions);
           });
         })
-      } 
+      
+      
+      } else if (answer.init_question === 'VIEW ALL EMPLOYEES') {
+        connection.query("SELECT * FROM employee", function(err, result) {
+          if (err) throw err
+          console.log(result);
+          inquirer.prompt([
+            {
+              type: 'confirm',
+              message: 'WOULD YOU LIKE TO DO ANYTHING ELSE?',
+              name: 'restart'
+            }
+          ]).then(answer => {
+            notDone = answer.restart;
+            startApp(questions);
+          });
+        })
+      }
     })
   
   
