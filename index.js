@@ -194,6 +194,42 @@ inquirer
             startApp(questions);
           });
         })
+      
+      
+      } else if (answer.init_question === 'UPDATE EMPLOYEE ROLE') {
+        inquirer.prompt([
+          {
+            message: 'WHAT ROLE WOULD YOU LIKE TO CHANGE?',
+            name: 'changerole'
+          },
+          {
+            message: 'WHAT IS THE NEW SALARY OF THIS POSITION?',
+            name: 'new_salary'
+          },
+          {
+            message: 'WHAT IS THE NEW DEPARTMENT ID OF THIS ROLE?',
+            name: 'new_department_id'
+          }
+        ]).then(answer => {
+          connection.query(
+            'INSERT INTO employee_role SET ?',
+            {
+              salary: answer.new_salary,
+              department_id: answer.new_department_id
+            }
+          )
+          console.log(answer);
+          inquirer.prompt([
+            {
+              type: 'confirm',
+              message: 'WOULD YOU LIKE TO DO ANYTHING ELSE?',
+              name: 'restart'
+            }
+          ]).then(answer => {
+            notDone = answer.restart;
+            startApp(questions);
+          });
+        })
       }
     })
   
